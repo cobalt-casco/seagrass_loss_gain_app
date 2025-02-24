@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20140226</pubdate>
+                <title>Maine Boat Launches GeoLibrary</title>
+                <onlink>https://gis.maine.gov/arcgis/rest/services/Structure/Maine_GeoLibrary_Structure/MapServer/1</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>BOATLNCH depicts state-managed and state-assisted boating facility locations throughout Maine at 1:24000 scale or better recorded by the Boating Facilities Division of the Bureau of Parks &amp; Lands. Maine's Bureau of Parks and Lands, Maine's Department of Inland Fisheries &amp; Wildlife and land owners provide access to lakes, ponds, rivers, and the coast at 456 locations. Sites may have gravel or hard-surfaced ramps and may include boarding floats, rest rooms and picnic tables. A few sites have canoe or carry-in access only. Some ramps on tidal waters may be useable only at high tides and are designated "part-tide" facilities. A brochure listing all the boat launches is available by calling (207) 287-4952 or you can view an online version at http://www.state.me.us/doc/parks/programs/boating/index.html .</abstract>
+            <purpose>Digital mapping of Maine boating facilities on both coastal and inland waters, and locations of state-managed and state-assisted boat launches in Maine.</purpose>
+        </descript>
+        <status>
+            <update>As needed</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-71.2925</westbc>
+                <eastbc>-66.6782</eastbc>
+                <northbc>47.5212</northbc>
+                <southbc>42.9285</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>ISO 19115 Topic Categories</themekt>
+                <themekey>structure</themekey>
+            </theme>
+            <place>
+                <placekt>None</placekt>
+                <placekey>Maine</placekey>
+            </place>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>Public use.  Users assume any risks associated with use of this data.</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>Maine GeoLibrary</cntorg>
+                </cntorgp>
+                <cntpos>GIS Coordinator</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>51 Commerce Dr, 3rd floor</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04330</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>(207) 624-7700</cntvoice>
+                <cntemail>GeolibraryBoard.OIT@maine.gov</cntemail>
+            </cntinfo>
+        </ptcontac>
+        <datacred>Maine Bureau of Parks and Lands, Maine's Department of Inland Fisheries &amp; Wildlife</datacred>
+    </idinfo>
+    <metainfo>
+        <metd>20191211</metd>
+        <metc>
+            <cntinfo>
+                <!--no contact person or organization name available-->
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>
