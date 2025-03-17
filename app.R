@@ -169,7 +169,8 @@ server <- function(input, output){
       clearGroup("boat_launches") |>
       
       addPolylines(data = plot_extent(), #need to add another one of these for max extent
-                  color = "black") |>
+                  color = "black",
+                  weight = 2) |>
       # add Polygons for loss gain relative to a reference year
       addPolygons(data = loss_gain_reference(),
                   fillColor = ~loss_gain_pal(type),
