@@ -151,14 +151,14 @@ server <- function(input, output){
                   fillColor = ~loss_gain_pal(type),
                   stroke = FALSE,
                   fillOpacity = 1) 
-    if (input$toggle_boat_luanches == "On") {
+    if (input$toggle_boat_luanches == "On") { #for toggling the boat launches 
       leafletProxy(mapId = "map") |> 
         addCircleMarkers(data = most_recent_extent(),
                          color = "black",
                          stroke = TRUE, 
                          fillOpacity = 0.8,
                          radius = 4,
-                         ) # Assumes boat ramp data has a "NAME" column
+                         ) 
     
     }
   })
