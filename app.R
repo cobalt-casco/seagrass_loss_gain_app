@@ -68,6 +68,9 @@ ui <- fluidPage(
                    label = "Toggle the Most Recent Flyover Extent",
                    choices = list("On" , "Off"),
                    selected = list("On" , "Off")[2]),
+     
+      fileInput("gpx_file", "Upload GPX File",
+                accept = c(".gpx"))
     
     ),
     
@@ -109,6 +112,15 @@ server <- function(input, output){
     
     ret
   
+  })
+  
+  gpx_data <- reactive({
+    req(input$gpx_file)  # Ensure a file is uploaded
+    
+    # Read the GPX file as an sf object
+    gpx_sf <- sf::st_read(input$gpx_file$datapath, layer = "tracks", quiet = TRUE)
+    
+    return(gpx_sf)
   })
   
   #create a reactive for the boat launches
@@ -194,6 +206,11 @@ server <- function(input, output){
                      stroke = FALSE, 
                      fillOpacity = 0.8)  
     }
+    req(gpx_data())  # Ensure there's data
+    
+    leafletProxy("map") |> 
+      #clearShapes() |>  # Remove previous GPX data if needed
+      addPolylines(data = gpx_data(), color = "yellow", weight = 5)  # Add GPX track
   })
   
 }
