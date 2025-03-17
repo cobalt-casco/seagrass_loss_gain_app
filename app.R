@@ -25,9 +25,11 @@ max_extent <- readRDS("data/max_seagras_extent_sf.Rds")
 loss_gain <- readRDS("data/loss_gain_map_2022.Rds")
 seagrass <- readRDS("data/joined_seagrass_cover.Rds")
 boat_ramps <- st_read("data/Maine_Boat_Launches_GeoLibrary/Maine_Boat_Launches_GeoLibrary.shp")
+recent_coverage <- st_read("data/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp")
 
-# crop the boatramps to the extent of max_extent with st_crop()
+# crop the boatramps and most recent data to the extent of max_extent with st_crop()
 casco_boat_ramps <- st_crop(boat_ramps, max_extent)
+most_recent_coverage <- st_crop(recent_coverage, max_extent)
 
 
 # define color palette
@@ -61,6 +63,11 @@ ui <- fluidPage(
                   label = "Toggle the Boat Launches",
                   choices = list("On" , "Off"),
                   selected = list("On" , "Off")[2]),
+      
+      radioButtons(inputId = "toggle_most_recent_extent",
+                   label = "Toggle the Most Recent Flyover Extent",
+                   choices = list("On" , "Off"),
+                   selected = list("On" , "Off")[2]),
     
     ),
     
@@ -104,14 +111,25 @@ server <- function(input, output){
   
   })
   
-  #create a reactive for current sea grass coverage
-  most_recent_extent <- reactive({
+  #create a reactive for the boat launches
+  boat_launches <- reactive({
     if (input$toggle_boat_luanches == "On") {
       return(casco_boat_ramps) # Return the boat launch shapefile
     } else {
       return(NULL) # Return NULL if the toggle is Off
+    
     }
   })
+    
+  #create a reactive for the current seagrass coverage
+  most_recent_extent <- reactive({
+    if (input$toggle_most_recent_extent == "On") {
+      return(most_recent_coverage) # Return the boat launch shapefile
+    } else {
+      return(NULL) # Return NULL if the toggle is Off
+    }
+  })
+  
   
   # render outputs
   output$map <- renderLeaflet({
@@ -153,20 +171,21 @@ server <- function(input, output){
                   fillOpacity = 1) 
     if (input$toggle_boat_luanches == "On") { #for toggling the boat launches 
       leafletProxy(mapId = "map") |> 
-        addCircleMarkers(data = most_recent_extent(),
+        addCircleMarkers(data = boat_launches(),
                          color = "black",
                          stroke = TRUE, 
                          fillOpacity = 0.8,
-                         radius = 4,
-                         ) 
-    
+                         radius = 4
+        )
     }
+    if (input$toggle_most_recent_extent == "On"){
+      leafletProxy(mapId = "map") |> 
+        addPolylines(data = most_recent_extent(), 
+                     color = "green")  
+    }
+      
+    
   })
-  
-  
-  
-  
-  
 }
 
 # 4. Call shinyApp() to run the app
