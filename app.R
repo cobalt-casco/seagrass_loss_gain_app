@@ -162,6 +162,8 @@ server <- function(input, output){
   
     leafletProxy(mapId = "map") |>
       clearShapes()|>
+      clearGroup("boat_launches") |>
+      
       addPolylines(data = plot_extent(), #need to add another one of these for max extent
                   color = "black") |>
       # add Polygons for loss gain relative to a reference year
@@ -175,17 +177,17 @@ server <- function(input, output){
                          color = "black",
                          stroke = TRUE, 
                          fillOpacity = 0.8,
-                         radius = 4
+                         radius = 4,
+                         group = "boat_launches"
         )
-    }
+    } 
     if (input$toggle_most_recent_extent == "On"){
       leafletProxy(mapId = "map") |> 
         addPolylines(data = most_recent_extent(), 
                      color = "green")  
     }
-      
-    
   })
+  
 }
 
 # 4. Call shinyApp() to run the app
