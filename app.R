@@ -55,7 +55,13 @@ ui <- fluidPage(
       radioButtons(inputId = "reference_year",
                    label = "Choose Reference Year",
                    choices = unique(loss_gain$reference_year),
-                   selected = unique(loss_gain$reference_year)[1])
+                   selected = unique(loss_gain$reference_year)[1]),
+      
+      radioButtons(inputId = "toggle_boat_luanches",
+                  label = "Toggle the Boat Launches",
+                  choices = list("On" , "Off"),
+                  selected = list("On" , "Off")[2]),
+    
     ),
     
     mainPanel(
@@ -95,6 +101,16 @@ server <- function(input, output){
     print(ret)
     
     ret
+  
+  })
+  
+  #create a reactive for current sea grass coverage
+  most_recent_extent <- reactive({
+    if (input$toggle_boat_luanches == "On") {
+      return(casco_boat_ramps) # Return the boat launch shapefile
+    } else {
+      return(NULL) # Return NULL if the toggle is Off
+    }
   })
   
   # render outputs
@@ -128,13 +144,23 @@ server <- function(input, output){
   
     leafletProxy(mapId = "map") |>
       clearShapes()|>
-      addPolylines(data = plot_extent(),
+      addPolylines(data = plot_extent(), #need to add another one of these for max extent
                   color = "black") |>
       # add Polygons for loss gain relative to a reference year
       addPolygons(data = loss_gain_reference(),
                   fillColor = ~loss_gain_pal(type),
                   stroke = FALSE,
                   fillOpacity = 1) 
+    if (input$toggle_boat_luanches == "On") {
+      leafletProxy(mapId = "map") |> 
+        addCircleMarkers(data = most_recent_extent(),
+                         color = "black",
+                         stroke = TRUE, 
+                         fillOpacity = 0.8,
+                         radius = 4,
+                         ) # Assumes boat ramp data has a "NAME" column
+    
+    }
   })
   
   
