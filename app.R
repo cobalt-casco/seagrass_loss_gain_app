@@ -124,7 +124,7 @@ server <- function(input, output){
   #create a reactive for the current seagrass coverage
   most_recent_extent <- reactive({
     if (input$toggle_most_recent_extent == "On") {
-      return(most_recent_coverage) # Return the boat launch shapefile
+      return(most_recent_coverage) # Return the recent_extent shapefile
     } else {
       return(NULL) # Return NULL if the toggle is Off
     }
@@ -144,7 +144,7 @@ server <- function(input, output){
       addLegend(pal = loss_gain_pal,
                 values = loss_gain$type,
                 title = "Loss or Gain") |>
-      addLegend(colors = c("black", "green"),
+      addLegend(colors = c("blue", "green"),
                 labels = c("Boatramps", "Eelgrass"),  # No variable, just a single color
                 title = "Toggles",  
                 position = "bottomright") |>
@@ -163,7 +163,7 @@ server <- function(input, output){
   
   # Observe changes to inputs and update the map
   observe({
-  
+    
     leafletProxy(mapId = "map") |>
       clearShapes()|>
       clearGroup("boat_launches") |>
@@ -175,10 +175,11 @@ server <- function(input, output){
                   fillColor = ~loss_gain_pal(type),
                   stroke = FALSE,
                   fillOpacity = 1) 
+    
     if (input$toggle_boat_luanches == "On") { #for toggling the boat launches 
       leafletProxy(mapId = "map") |> 
         addCircleMarkers(data = boat_launches(),
-                         color = "black",
+                         color = "blue",
                          stroke = TRUE, 
                          fillOpacity = 0.8,
                          radius = 4,
@@ -187,8 +188,10 @@ server <- function(input, output){
     } 
     if (input$toggle_most_recent_extent == "On"){
       leafletProxy(mapId = "map") |> 
-        addPolylines(data = most_recent_extent(), 
-                     color = "green")  
+        addPolygons(data = most_recent_extent(), 
+                     fillColor = "green",
+                     stroke = FALSE, 
+                     fillOpacity = 0.8)  
     }
   })
   
