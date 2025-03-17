@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20230215</pubdate>
+                <title>MaineDEP Seagrass 2022 (Casco Bay Only)</title>
+                <geoform>vector digital data</geoform>
+                <onlink>https://gis.maine.gov/arcgis/rest/services/dep/Eelgrass/MapServer/3</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>This dataset contains the seagrass beds delineated in 2022 in Casco Bay, from Cape Elizabeth to Cape Small in Phippsburg. Polygons were screen digitized from aerial imagery flown at low tide on July 16th, 2022. Imagery was captured using a Vexcel Eagle 80-mm Mark 3 aerial camera mounted on a fixed wing aircraft and flown at an elevation of approximately 9,500 feet. Polygons were refined based on field verification efforts that took place between August 29 and September 27, 2022. Field verification was carried out on foot by Old Brunswick Road at the New Meadows River and by boat using a Maine DEP vessel (20-foot Maritime Skiff with a 115 horse outboard motor), Ocean Systems High-Definition (HD) underwater video camera and SeaViewer 950 Sea-Drop Analog underwater video camera, and Eos Positioning Systems Arrow Gold GNSS GPS systems that pair wirelessly to Android powered ruggedized field tablets capable of submeter accuracy. Each seagrass bed is named by sequential number moving from southwest to northeast along the coast, then back southeast along the islands, which is provided in the ‘Name’ column. These beds are further divided into polygons by percent cover. Polygons are labeled with a unique identifier consisting of sequential numbers in the ‘Id’ column. A singular bed can consist of several Ids. Percent cover categories and percentages are based on those established by Orth et al. (1991), where 1=0-10% cover (very sparse), 2=10-40% cover (sparse), 3=40-70% cover (moderate), 4=70-100% cover (dense). This seagrass polygon shapefile also contains fields for whether the bed was field verified in 2022 (Y=yes or N=no) and whether there is corresponding underwater video footage (Y=yes, N=no). Field verified beds were verified only in part, meaning one or more transects were placed along the perimeter of the bed to confirm seagrass presence and aerial signatures; bed boundaries were not verified in their entirety. Field verification refers to whether the bed (Name field) was visited, it does not account for individual parts of the bed (Id field) with differing cover classes, though often verification occurred in more than one cover class per bed. Underwater video is present for most of the field verified beds but is lacking in some areas due to video transfer errors. The video column corresponds to the named underwater video file, which corresponds to transect name. Species and comment fields are also incorporated in this dataset. Species are only noted if directly observed by underwater video or by visual observations in shallow water. Widgeon grass was observed only in the New Meadows River area off of Old Brunswick Road from samples washed up near shore.</abstract>
+            <purpose>This dataset contains the seagrass beds delineated in 2022 in Casco Bay, from Cape Elizabeth to Cape Small in Phippsburg.</purpose>
+        </descript>
+        <timeperd>
+            <timeinfo>
+                <rngdates>
+                    <begdate>20230215</begdate>
+                    <enddate>20260218</enddate>
+                </rngdates>
+            </timeinfo>
+            <current>Data is in final format</current>
+        </timeperd>
+        <status>
+            <progress>Complete</progress>
+            <update>None planned</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-70.3204850585903</westbc>
+                <eastbc>-69.72990126952793</eastbc>
+                <northbc>43.94195830654137</northbc>
+                <southbc>43.531213169022934</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>ISO 19115 Topic Categories</themekt>
+                <themekey>biota</themekey>
+                <themekey>environment</themekey>
+                <themekey>oceans</themekey>
+            </theme>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>MaineDEP</themekey>
+                <themekey>Maine Department of Environmental Protection</themekey>
+                <themekey>MEDEP BWQ</themekey>
+                <themekey>Water</themekey>
+                <themekey>Water Quality</themekey>
+                <themekey>BIOLOGY</themekey>
+                <themekey>eelgrass</themekey>
+                <themekey>seagrass</themekey>
+                <themekey>maine coastal waters</themekey>
+                <themekey>coastal</themekey>
+                <themekey>submerged aquatic vegetation</themekey>
+                <themekey>Zostera marina</themekey>
+                <themekey>habitat</themekey>
+                <themekey>MaineGeoLibrary</themekey>
+                <themekey>biota</themekey>
+                <themekey>oceans</themekey>
+                <themekey>environment</themekey>
+            </theme>
+        </keywords>
+        <accconst>Other Constraints</accconst>
+        <useconst>None</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>Maine Department of Environmental Protection</cntorg>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>physical</addrtype>
+                    <address>28 Tyson Dr</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04333</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>207-287-7688</cntvoice>
+            </cntinfo>
+        </ptcontac>
+        <datacred>Seagrass mapping was produced for the State of Maine Department of Environmental Protection. Orthophotos for this effort were acquired by James W. Sewall and Bluesky Geospatial was subcontracted for aerial imagery acquisition. Normandeau Associates, Inc. was the primary contractor for seagrass delineation.</datacred>
+    </idinfo>
+    <spdoinfo>
+        <direct>Vector</direct>
+    </spdoinfo>
+    <metainfo>
+        <metd>20230215</metd>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>Maine Department of Environmental Protection</cntorg>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>physical</addrtype>
+                    <address>28 Tyson Dr</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04333</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>207-287-7688</cntvoice>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>
