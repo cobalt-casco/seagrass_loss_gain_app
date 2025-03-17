@@ -147,7 +147,7 @@ server <- function(input, output){
   output$map <- renderLeaflet({
     # get a bounding box
     b <- st_bbox(max_extent) |> as.numeric()
- 
+    print(b)
     
     # make a leaflet map
     casco_map <- leaflet() |>
@@ -206,11 +206,28 @@ server <- function(input, output){
                      stroke = FALSE, 
                      fillOpacity = 0.8)  
     }
-    req(gpx_data())  # Ensure there's data
+    req(gpx_data())  
+    gpx_sf <- gpx_data()  # ✅ Evaluate the reactive
     
-    leafletProxy("map") |> 
-      #clearShapes() |>  # Remove previous GPX data if needed
-      addPolylines(data = gpx_data(), color = "yellow", weight = 5)  # Add GPX track
+    if (!is.null(gpx_sf)) {  # Check if data is not empty
+      bbox <- as.list(st_bbox(gpx_sf))
+      print(bbox)
+      
+      centroid <- st_centroid(gpx_sf)
+      centroid_coords <- st_coordinates(centroid)  # Extract coordinates from centroid
+      centroid_lon <- centroid_coords[1]  # Longitude
+      centroid_lat <- centroid_coords[2]  # Latitude
+      
+      # Add GPX layer to the map
+      leafletProxy("map") |>  
+        addPolylines(data = gpx_sf,  
+                     color = "yellow", 
+                     weight = 4,  
+                     layerId = "gpx_layer") |> 
+      flyTo(lng = centroid_lon, lat = centroid_lat, zoom = 16)  #zoom to the bounding box of the GPX layer
+        
+        
+    }
   })
   
 }
