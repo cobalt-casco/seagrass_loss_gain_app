@@ -144,6 +144,10 @@ server <- function(input, output){
       addLegend(pal = loss_gain_pal,
                 values = loss_gain$type,
                 title = "Loss or Gain") |>
+      addLegend(colors = c("black", "green"),
+                labels = c("Boatramps", "Eelgrass"),  # No variable, just a single color
+                title = "Toggles",  
+                position = "bottomright") |>
       addControlGPS(
         options = gpsOptions(
           position = "topleft",
