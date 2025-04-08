@@ -39,7 +39,7 @@ loss_gain_pal <- colorFactor(palette = c("red", "purple"),
 # 2. Definine a user interface
 ui <- fluidPage(
   
-  titlePanel("Where has seagrass changed in Casco Bay"),
+  titlePanel("Seagrass Change in Casco Bay"),
   
   theme = shinytheme("spacelab"),
   
