@@ -1,12 +1,6 @@
 #' -----------------------------------------------
 #' Gain and Loss Shiny App for the field for COBALT
 #' 
-#' TODO:
-#'  - Have the option to look at loss, gain, or both - DONE
-#'  - Look at boundaries of the bed in the reference - DONE
-#'  - Add in the boatramps on the map
-#'  - Play with colors and stroke or fill opacity
-#'  - Add the dot (Jarrett) - DONE
 #' -----------------------------------------------
 
 
@@ -48,7 +42,7 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Selector for cover percent of max extent
-      selectInput(inputId = "cover_class",
+      checkboxGroupInput(inputId = "cover_class",
                   label = "Choose a Cover Class for Extent",
                   choices = unique(max_extent$cover_pct),
                   selected = unique(max_extent$cover_pct)[1]),
@@ -65,7 +59,7 @@ ui <- fluidPage(
                   selected = list("On" , "Off")[2]),
       
       radioButtons(inputId = "toggle_most_recent_extent",
-                   label = "Toggle the Most Recent Flyover Extent",
+                   label = "Toggle DEP Seagrass Layer 2022",
                    choices = list("On" , "Off"),
                    selected = list("On" , "Off")[2]),
      
@@ -92,7 +86,7 @@ server <- function(input, output){
   # to the selected cover_class
   plot_extent <- reactive({
     ret <- max_extent |>
-      filter(cover_pct == input$cover_class)
+      filter(cover_pct %in% input$cover_class)
     
     ret
   })
@@ -100,13 +94,13 @@ server <- function(input, output){
   # Make a reactive for current gain_loss 
   # using reference_year and the loss_gain object
   loss_gain_reference <- reactive({
-    
-    cover_class <- which(input$cover_class == max_extent$cover_pct)[1]
+    print(input$cover_class)
+    cover_class <- (input$cover_class %in% max_extent$cover_pct)
 
     
-    ret <- loss_gain |>
-      filter(reference_year == input$reference_year) |>
-      filter(cover == cover_class)
+    ret <- loss_gain %>%
+      filter(reference_year == input$reference_year) %>%
+      filter(cover %in% cover_class)
     
     print(ret)
     
@@ -207,7 +201,7 @@ server <- function(input, output){
                      fillOpacity = 0.8)  
     }
     req(gpx_data())  
-    gpx_sf <- gpx_data()  # ✅ Evaluate the reactive
+    gpx_sf <- gpx_data()  # Evaluate the reactive
     
     if (!is.null(gpx_sf)) {  # Check if data is not empty
       bbox <- as.list(st_bbox(gpx_sf))
