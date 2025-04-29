@@ -73,7 +73,8 @@ ui <- fluidPage(
       fileInput("gpx_file", "Upload GPX File",
                 accept = c(".gpx")),
       
-      downloadButton("download_map", "Download Current Map")
+      #to enable the download button (functional)
+      #downloadButton("download_map", "Download Current Map")
       
       
     
@@ -161,16 +162,17 @@ server <- function(input, output){
       return(NULL) # Return NULL if the toggle is Off
     }
   })
-  output$download_map <- downloadHandler(
-    filename = function() {
-      paste0("casco_map_", Sys.Date(), ".png")  # Download as PNG file
-    },
-    content = function(file) {
-      # Snapshot the current map using `mapshot`
-      map <- output$map()  # Capture the map that was rendered
-      mapview::mapshot(map, file = file, filetype = "png")  # Save as PNG
-    }
-  )
+  #for the download button, maybe a potential route to take but has lots of issues
+  # output$download_map <- downloadHandler(
+  #   filename = function() {
+  #     paste0("casco_map_", Sys.Date(), ".png")  # Download as PNG file
+  #   },
+  #   content = function(file) {
+  #     # Snapshot the current map using `mapshot`
+  #     map <- output$map()  # Capture the map that was rendered
+  #     mapview::mapshot(map, file = file, filetype = "png")  # Save as PNG
+  #   }
+  # )
   
   
   # render outputs
