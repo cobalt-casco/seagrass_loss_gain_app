@@ -49,7 +49,7 @@ ui <- fluidPage(
       
       # make a radio button input to select a reference year
       radioButtons(inputId = "reference_year",
-                   label = "Choose Reference Year",
+                   label = "Reference Year for DEP Segrass Mapping",
                    choices = unique(loss_gain$reference_year),
                    selected = unique(loss_gain$reference_year)[1]),
       
