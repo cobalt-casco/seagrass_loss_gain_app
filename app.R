@@ -211,7 +211,7 @@ server <- function(input, output){
     if (input$toggle_most_recent_extent == "On"){
       leafletProxy(mapId = "map") |> 
         addPolygons(data = most_recent_extent(), 
-                     fillColor = "green",
+                     fillColor = "red",
                      stroke = FALSE, 
                      fillOpacity = 0.8)  
     }
