@@ -13,6 +13,13 @@ library(leaflet) # map
 library(leaflet.extras) # map tools
 library(sf) #for geospatial data
 library(dplyr)
+library(mapview)
+library(webshot)
+
+#for install
+#install.packages("mapview")
+#install.packages("webshot")  # This will also install dependencies
+#webshot::install_phantomjs() 
 
 # load the data
 max_extent <- readRDS("data/max_seagras_extent_sf.Rds")
@@ -64,7 +71,12 @@ ui <- fluidPage(
                    selected = list("On" , "Off")[2]),
      
       fileInput("gpx_file", "Upload GPX File",
-                accept = c(".gpx"))
+                accept = c(".gpx")),
+      
+      #to enable the download button (functional)
+      #downloadButton("download_map", "Download Current Map")
+      
+      
     
     ),
     
@@ -150,37 +162,48 @@ server <- function(input, output){
       return(NULL) # Return NULL if the toggle is Off
     }
   })
+  #for the download button, maybe a potential route to take but has lots of issues
+  # output$download_map <- downloadHandler(
+  #   filename = function() {
+  #     paste0("casco_map_", Sys.Date(), ".png")  # Download as PNG file
+  #   },
+  #   content = function(file) {
+  #     # Snapshot the current map using `mapshot`
+  #     map <- output$map()  # Capture the map that was rendered
+  #     mapview::mapshot(map, file = file, filetype = "png")  # Save as PNG
+  #   }
+  # )
   
   
   # render outputs
   output$map <- renderLeaflet({
-    # get a bounding box
-    b <- st_bbox(max_extent) |> as.numeric()
-    print(b)
-    
-    # make a leaflet map
-    casco_map <- leaflet() |>
-      addProviderTiles(provider = "Esri.WorldTopoMap") |>
-      fitBounds(b[1], b[2], b[3], b[4]) |>
-      addLegend(pal = loss_gain_pal,
-                values = loss_gain$type,
-                title = "Loss or Gain") |>
-      addLegend(colors = c("blue", "green"),
-                labels = c("Boatramps", "Eelgrass"),  # No variable, just a single color
-                title = "Toggles",  
-                position = "bottomright") |>
-      addControlGPS(
-        options = gpsOptions(
-          position = "topleft",
-          activate = TRUE, 
-          autoCenter = TRUE,
-          setView = TRUE))
-    
-    activateGPS(casco_map)
-    
-    casco_map
-    
-  })
+  # get a bounding box
+  b <- st_bbox(max_extent) |> as.numeric()
+
+  # create the base map
+  casco_map <- leaflet() |> 
+    addProviderTiles(provider = "Esri.WorldTopoMap") |> 
+    fitBounds(b[1], b[2], b[3], b[4]) |> 
+    addLegend(pal = loss_gain_pal,
+              values = loss_gain$type,
+              title = "Loss or Gain") |> 
+    addLegend(colors = c("blue", "red"),
+              labels = c("Boatramps", "Eelgrass"),
+              title = "Toggles",  
+              position = "bottomright") |> 
+    addControlGPS(
+      options = gpsOptions(
+        position = "topleft",
+        activate = TRUE, 
+        autoCenter = TRUE, 
+        setView = TRUE)) 
+
+  # Activate GPS on the map
+  activateGPS(casco_map)
+
+  # Return the final map
+  casco_map
+})
   
   # Observe changes to inputs and update the map
   observe({
