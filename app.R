@@ -26,6 +26,7 @@ casco_boat_ramps <- st_crop(boat_ramps, max_extent)
 most_recent_coverage <- st_crop(recent_coverage, max_extent)
 
 
+print(max_extent$cover_pct)
 # define color palette
 loss_gain_pal <- colorFactor(palette = c("red", "purple"),
                              domain = loss_gain$type)
@@ -34,9 +35,8 @@ loss_gain_pal <- colorFactor(palette = c("red", "purple"),
 ui <- fluidPage(
   
   titlePanel("Seagrass Change in Casco Bay"),
-  
+
   theme = shinytheme("spacelab"),
-  
   # add our layout
   sidebarLayout(
     sidebarPanel(
@@ -45,7 +45,7 @@ ui <- fluidPage(
       checkboxGroupInput(inputId = "cover_class",
                   label = "Choose a Cover Class for Extent",
                   choices = unique(max_extent$cover_pct),
-                  selected = unique(max_extent$cover_pct)[1]),
+                  selected = NULL),
       
       # make a radio button input to select a reference year
       radioButtons(inputId = "reference_year",
@@ -85,27 +85,42 @@ server <- function(input, output){
   # filter our max_extent data
   # to the selected cover_class
   plot_extent <- reactive({
-    ret <- max_extent |>
+    ret <- max_extent %>%
       filter(cover_pct %in% input$cover_class)
     
     ret
   })
-  
+  # Debugging example
   # Make a reactive for current gain_loss 
   # using reference_year and the loss_gain object
   loss_gain_reference <- reactive({
-    print(input$cover_class)
-    cover_class <- (input$cover_class %in% max_extent$cover_pct)
-
+    #print("DEBUG")
+    #print(input$cover_class)
+    
+    selected_cover_values <- which(max_extent$cover_pct %in% input$cover_class)
+    #print("Selected cover values (numeric):")
+    #print(selected_cover_values)
     
     ret <- loss_gain %>%
       filter(reference_year == input$reference_year) %>%
-      filter(cover %in% cover_class)
+      filter(cover %in% selected_cover_values)
     
-    print(ret)
+    # Print geometry validity status
+    validities <- st_is_valid(ret)
+    #print("Validity check:")
+    #print(validities)
     
-    ret
-  
+    if (any(!validities)) {
+      print("INVALID geometries found. Fixing...")
+      # Option 1: try fixing with st_make_valid
+      ret[!validities, ] <- st_make_valid(ret[!validities, ])
+      
+      # Option 2: drop bad geometries if still broken
+      validities <- st_is_valid(ret)  # re-check
+      ret <- ret[validities, ]
+    }
+    
+    return(ret)
   })
   
   gpx_data <- reactive({
