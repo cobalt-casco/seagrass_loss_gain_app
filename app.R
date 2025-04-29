@@ -14,6 +14,10 @@ library(leaflet.extras) # map tools
 library(sf) #for geospatial data
 library(dplyr)
 
+install.packages("mapview")
+install.packages("webshot2")  # This will also install dependencies
+webshot2::install_phantomjs() 
+
 # load the data
 max_extent <- readRDS("data/max_seagras_extent_sf.Rds")
 loss_gain <- readRDS("data/loss_gain_map_2022.Rds")
@@ -64,7 +68,11 @@ ui <- fluidPage(
                    selected = list("On" , "Off")[2]),
      
       fileInput("gpx_file", "Upload GPX File",
-                accept = c(".gpx"))
+                accept = c(".gpx")),
+      
+      downloadButton("download_map", "Download Current Map")
+      
+      
     
     ),
     
