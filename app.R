@@ -106,6 +106,38 @@ server <- function(input, output){
     return(ret)
   })
   
+  #to use points instead of lines 
+  # gpx_tracks <- reactiveValues(lines = list(), points = list())
+  # 
+  # observeEvent(input$gpx_file, {
+  #   req(input$gpx_file)
+  #   
+  #   files <- input$gpx_file$datapath
+  #   for (f in files) {
+  #     # Try to read track lines
+  #     gpx_line <- tryCatch({
+  #       sf::st_read(f, layer = "tracks", quiet = TRUE)
+  #     }, error = function(e) NULL)
+  #     
+  #     if (!is.null(gpx_line)) {
+  #       gpx_tracks$lines[[length(gpx_tracks$lines) + 1]] <- gpx_line
+  #     }
+  #     
+  #     # Try to read track points or waypoints
+  #     gpx_points <- tryCatch({
+  #       sf::st_read(f, layer = "track_points", quiet = TRUE)
+  #     }, error = function(e) {
+  #       tryCatch({
+  #         sf::st_read(f, layer = "waypoints", quiet = TRUE)
+  #       }, error = function(e2) NULL)
+  #     })
+  #     
+  #     if (!is.null(gpx_points)) {
+  #       gpx_tracks$points[[length(gpx_tracks$points) + 1]] <- gpx_points
+  #     }
+  #   }
+  # })
+  
   observeEvent(input$gpx_file, {
     req(input$gpx_file)
     
@@ -191,6 +223,20 @@ server <- function(input, output){
                     stroke = FALSE, 
                     fillOpacity = 0.8)
     }
+    
+    #to view points instead of lines on the map 
+    # if (length(gpx_tracks$points) > 0) {
+    #   for (gpx_pt in gpx_tracks$points) {
+    #     if (!is.null(gpx_pt)) {
+    #       leafletProxy("map") |>  
+    #         addCircleMarkers(data = gpx_pt,
+    #                          color = "orange",
+    #                          radius = 5,
+    #                          stroke = TRUE,
+    #                          fillOpacity = 0.9)
+    #     }
+    #   }
+    # }
     
     if (length(gpx_tracks$list) > 0) {
       for (gpx_sf in gpx_tracks$list) {
