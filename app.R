@@ -55,19 +55,22 @@ ui <- fluidPage(
                    label = "Reference Year for DEP Segrass Mapping",
                    choices = unique(loss_gain$reference_year),
                    selected = unique(loss_gain$reference_year)[1]),
-      
+     
+       #make a radio button for toggle boat launches
       radioButtons(inputId = "toggle_boat_luanches",
                    label = "Toggle the Boat Launches",
                    choices = list("On" , "Off"),
-                   selected = list("On" , "Off")[2]),
+                   selected = list("On" , "Off")[2]), #init with off
       
+      #make a radio button for most recent extenet (2022)
       radioButtons(inputId = "toggle_most_recent_extent",
                    label = "Toggle DEP Seagrass Layer 2022",
                    choices = list("On" , "Off"),
-                   selected = list("On" , "Off")[2]),
+                   selected = list("On" , "Off")[2]),#init with off
       
+      #file input for gpx files
       fileInput("gpx_file", "Upload GPX File",
-                accept = c(".gpx"), multiple =TRUE)
+                accept = c(".gpx"), multiple =TRUE) #accept gpx files only
     ),
     
     mainPanel(
@@ -83,20 +86,20 @@ server <- function(input, output){
   
   gpx_tracks <- reactiveValues(list = list())
   
-  plot_extent <- reactive({
+  plot_extent <- reactive({ #extent of the dispaleyd map 
     ret <- max_extent %>%
       filter(cover_pct %in% input$cover_class)
     ret
   })
   
-  loss_gain_reference <- reactive({
+  loss_gain_reference <- reactive({ #selector for the loss and gain year reference 
     selected_cover_values <- which(max_extent$cover_pct %in% input$cover_class)
     ret <- loss_gain %>%
       filter(reference_year == input$reference_year) %>%
       filter(cover %in% selected_cover_values)
     
     validities <- st_is_valid(ret)
-    if (any(!validities)) {
+    if (any(!validities)) { #if year doesnt work this will catch the error 
       print("INVALID geometries found. Fixing...")
       ret[!validities, ] <- st_make_valid(ret[!validities, ])
       validities <- st_is_valid(ret)
@@ -106,7 +109,7 @@ server <- function(input, output){
     return(ret)
   })
   
-  #to use points instead of lines 
+  #to use points instead of lines enable this, still in testing though need to be carful 
   # gpx_tracks <- reactiveValues(lines = list(), points = list())
   # 
   # observeEvent(input$gpx_file, {
@@ -138,25 +141,25 @@ server <- function(input, output){
   #   }
   # })
   
-  observeEvent(input$gpx_file, {
+  observeEvent(input$gpx_file, { #takes the gpx input from a line file 
     req(input$gpx_file)
     
     files <- input$gpx_file$datapath
-    for (f in files) {
-      gpx_sf <- tryCatch({
+    for (f in files) { #go through each file if multiple 
+      gpx_sf <- tryCatch({ #if the file doesnt work this will catch 
         sf::st_read(f, layer = "tracks", quiet = TRUE)
       }, error = function(e) {
         print(paste("Failed to read:", f))
         return(NULL)
       })
       
-      if (!is.null(gpx_sf)) {
+      if (!is.null(gpx_sf)) { #if the file is empty go to the next if multiple 
         gpx_tracks$list[[length(gpx_tracks$list) + 1]] <- gpx_sf
       }
     }
   })
   
-  boat_launches <- reactive({
+  boat_launches <- reactive({ #get the boat launches file and return the projection data
     if (input$toggle_boat_luanches == "On") {
       return(casco_boat_ramps)
     } else {
@@ -164,7 +167,7 @@ server <- function(input, output){
     }
   })
   
-  most_recent_extent <- reactive({
+  most_recent_extent <- reactive({ #if most recent extent on then project it 
     if (input$toggle_most_recent_extent == "On") {
       return(most_recent_coverage)
     } else {
@@ -172,20 +175,20 @@ server <- function(input, output){
     }
   })
   
-  output$map <- renderLeaflet({
+  output$map <- renderLeaflet({ #the output map
     b <- st_bbox(max_extent) |> as.numeric()
     
     casco_map <- leaflet() |> 
-      addProviderTiles(provider = "Esri.WorldTopoMap") |> 
-      fitBounds(b[1], b[2], b[3], b[4]) |> 
-      addLegend(pal = loss_gain_pal,
+      addProviderTiles(provider = "Esri.WorldTopoMap") |> #the base map
+      fitBounds(b[1], b[2], b[3], b[4]) |>  #the boundries of the default starting map
+      addLegend(pal = loss_gain_pal, #the legends 
                 values = loss_gain$type,
                 title = "Loss or Gain") |> 
       addLegend(colors = c("blue", "red"),
                 labels = c("Boatramps", "Eelgrass"),
                 title = "Toggles",  
                 position = "bottomright") |> 
-      addControlGPS(
+      addControlGPS( #allows you to move with buttons 
         options = gpsOptions(
           position = "topleft",
           activate = TRUE, 
@@ -196,17 +199,17 @@ server <- function(input, output){
     casco_map
   })
   
-  observe({
+  observe({ #start to add the GIS data
     leafletProxy(mapId = "map") |> 
       clearShapes() |> 
-      clearGroup("boat_launches") |> 
+      clearGroup("boat_launches") |> #adds the boundries of the seagrass beds
       addPolylines(data = plot_extent(), color = "black", weight = 2) |> 
       addPolygons(data = loss_gain_reference(),
                   fillColor = ~loss_gain_pal(type),
                   stroke = FALSE,
                   fillOpacity = 1)
     
-    if (input$toggle_boat_luanches == "On") {
+    if (input$toggle_boat_luanches == "On") { #adds the baotlaunches to the map
       leafletProxy(mapId = "map") |> 
         addCircleMarkers(data = boat_launches(),
                          color = "blue",
@@ -216,7 +219,7 @@ server <- function(input, output){
                          group = "boat_launches")
     }
     
-    if (input$toggle_most_recent_extent == "On") {
+    if (input$toggle_most_recent_extent == "On") { #put the most recent extent on if its toggled 
       leafletProxy(mapId = "map") |> 
         addPolygons(data = most_recent_extent(), 
                     fillColor = "red",
@@ -224,7 +227,7 @@ server <- function(input, output){
                     fillOpacity = 0.8)
     }
     
-    #to view points instead of lines on the map 
+    #to view points instead of lines on the map, still in testing though be carful 
     # if (length(gpx_tracks$points) > 0) {
     #   for (gpx_pt in gpx_tracks$points) {
     #     if (!is.null(gpx_pt)) {
@@ -238,7 +241,7 @@ server <- function(input, output){
     #   }
     # }
     
-    if (length(gpx_tracks$list) > 0) {
+    if (length(gpx_tracks$list) > 0) { #if theres gpx files input map the polygons
       for (gpx_sf in gpx_tracks$list) {
         if (!is.null(gpx_sf)) {
           leafletProxy("map") |>  
@@ -246,7 +249,7 @@ server <- function(input, output){
         }
       }
       
-      last_sf <- gpx_tracks$list[[length(gpx_tracks$list)]]
+      last_sf <- gpx_tracks$list[[length(gpx_tracks$list)]] 
       centroid <- st_centroid(last_sf)
       coords <- st_coordinates(centroid)
       
