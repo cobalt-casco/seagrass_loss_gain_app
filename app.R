@@ -52,7 +52,17 @@ loss_gain_pal <- colorFactor(palette = c("red", "purple", "purple"),
 
 # 2. Define a user interface 
 ui <- fluidPage(
-  titlePanel("Seagrass Change in Casco Bay"),
+  titlePanel(
+    title = div(
+      "Seagrass Change in Casco Bay",  
+      tags$img(src = "ZOESTRA.jpg",     # First image
+               height = "40px",        
+               style = "margin-left: 10px; vertical-align: middle;"), # Style for first image
+      tags$img(src = "COBALT.jpg", # Second image (assuming it's in 'www' folder)
+               height = "40px",        
+               style = "margin-left: 5px; vertical-align: middle;")  
+    )
+  ),
   theme = shinytheme("spacelab"),
   sidebarLayout(
     sidebarPanel(
