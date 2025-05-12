@@ -222,6 +222,7 @@ server <- function(input, output){
       fitBounds(b[1], b[2], b[3], b[4]) |> 
       addLegend(pal = loss_gain_pal, values = loss_gain_pal_domain, title = "Loss or Gain") |> 
       addLegend(colors = c("blue", "red"), labels = c("Boatramps", "Eelgrass"), title = "Toggles", position = "bottomright") |> 
+      addLegend(colors = c("yellow", "orange"), labels = c("Line data", "Point Data"), title = "Uploaded Data") |> 
       addLayersControl(
         baseGroups = c("Topographic", "Satellite"),
         options = layersControlOptions(collapsed = FALSE)
